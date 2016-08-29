@@ -3,7 +3,7 @@ import random
 import shutil
 
 from PIL import Image
-from flask import Flask, send_file
+from flask import Flask, send_file, request
 
 
 app = Flask(__name__)
@@ -44,12 +44,17 @@ def get_thumbnail(filename, width=500, height=None):
     return target
 
 
-@app.route('/')
+@app.route('/random.png')
 def serve_random_image():
     choices = filter(has_allowed_extension, os.listdir(images))
     choice = random.choice(choices)
     image = get_thumbnail(choice)
     return send_file(image, mimetype=get_mimetype(image))
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return 'This route does not exist {}'.format(request.url), 404
 
 
 if __name__ == '__main__':
