@@ -1,9 +1,9 @@
 import os
-import shutil
 import random
+import shutil
 
-from flask import Flask, send_file
 from PIL import Image
+from flask import Flask, send_file
 
 
 app = Flask(__name__)
