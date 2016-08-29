@@ -44,7 +44,7 @@ def get_thumbnail(filename, width=500, height=None):
     return target
 
 
-@app.route('/random.png')
+@app.route('/')
 def serve_random_image():
     choices = filter(has_allowed_extension, os.listdir(images))
     choice = random.choice(choices)
