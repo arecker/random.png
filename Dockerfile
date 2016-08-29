@@ -1,10 +1,7 @@
-FROM golang
+FROM python:2.7
 MAINTAINER Alex Recker <alex@reckerfamily.com>
-
-WORKDIR /srv
-COPY ./randomImages.go ./
-RUN go build randomImages.go
-RUN rm randomImages.go
-EXPOSE 5000
-
-CMD ["./randomImages"]
+COPY . /app
+WORKDIR /app
+RUN pip install -r requirements.txt
+ENTRYPOINT ["python"]
+CMD ["server.py"]
