@@ -8,7 +8,9 @@ from flask import Flask, send_file, request
 
 app = Flask(__name__)
 here = os.path.dirname(os.path.realpath(__file__))
-images = os.path.join(here, 'images')
+images = os.environ.get(
+    'images', os.path.join(here, 'images')
+)
 cache = os.path.join(here, 'cache')
 
 extensions = {
@@ -47,6 +49,8 @@ def get_thumbnail(filename, width=500, height=None):
 @app.route('/')
 def serve_random_image():
     choices = filter(has_allowed_extension, os.listdir(images))
+    if not choices:
+        return 'No pictures to pick from'
     choice = random.choice(choices)
     image = get_thumbnail(choice)
     return send_file(image, mimetype=get_mimetype(image))
@@ -58,17 +62,17 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    if not os.path.exists(images):
-        print('No images directory')
-        exit(1)
+    for path in [images, cache]:
+        try:
+            os.makedirs(path)
+        except OSError:
+            pass
 
     try:
-        os.makedirs(cache)
-    except OSError:
-        pass
-
-    try:
-        app.run(host='0.0.0.0')
+        app.run(
+            host=os.environ.get('host', '127.0.0.1'),
+            port=os.environ.get('port', 8000)
+        )
     finally:
         try:
             shutil.rmtree(cache)
