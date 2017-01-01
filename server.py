@@ -1,6 +1,5 @@
 import os
 import random
-import shutil
 
 from PIL import Image
 from flask import Flask, send_file, request
@@ -59,22 +58,3 @@ def serve_random_image():
 @app.errorhandler(404)
 def page_not_found(error):
     return 'This route does not exist {}'.format(request.url), 404
-
-
-if __name__ == '__main__':
-    for path in [images, cache]:
-        try:
-            os.makedirs(path)
-        except OSError:
-            pass
-
-    try:
-        app.run(
-            host=os.environ.get('host', '127.0.0.1'),
-            port=os.environ.get('port', 8000)
-        )
-    finally:
-        try:
-            shutil.rmtree(cache)
-        except:
-            pass

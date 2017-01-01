@@ -1,0 +1,12 @@
+#+TITLE: random.png
+
+Serve random images form a directory.  You can run the docker
+container with a command resembling this one:
+
+#+BEGIN_SRC sh
+  docker run \
+	 --name random.png \
+	 --restart always \
+	 -v ~/images:/app/images:ro \
+	 -d arecker/random.png:latest
+#+END_SRC
